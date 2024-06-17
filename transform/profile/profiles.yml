@@ -1,0 +1,41 @@
+---
+config:
+  send_anonymous_usage_stats: false
+  use_colors: true
+  partial_parse: true # for faster runs locally. Since dbt-cloud uses a different profile, this shouldn't impact CI or Prod Deploy
+
+personal_snowflake:
+  target: dev
+  outputs:
+    prod:
+      type: snowflake
+      threads: 10
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      database: "{{ env_var('SNOWFLAKE_TRANSFORM_DATABASE') }}"
+      role: "{{ env_var('SNOWFLAKE_TRANSFORM_ROLE') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_TRANSFORM_WAREHOUSE') }}"
+      schema: "{{ env_var('SNOWFLAKE_TRANSFORM_SCHEMA') }}"
+
+    dev:
+      type: snowflake
+      threads: 5
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      database: "{{ env_var('SNOWFLAKE_TRANSFORM_DATABASE') }}"
+      role: "{{ env_var('SNOWFLAKE_TRANSFORM_ROLE') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_TRANSFORM_WAREHOUSE') }}"
+      schema: "{{ env_var('SNOWFLAKE_TRANSFORM_SCHEMA') }}"
+
+    local:
+      type: snowflake
+      threads: 10
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      database: "{{ env_var('SNOWFLAKE_TRANSFORM_DATABASE') }}"
+      role: "{{ env_var('SNOWFLAKE_TRANSFORM_ROLE') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_TRANSFORM_WAREHOUSE') }}"
+      schema: "{{ env_var('SNOWFLAKE_TRANSFORM_SCHEMA') }}"
