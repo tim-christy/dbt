@@ -1,0 +1,94 @@
+[tool.poetry]
+name = "dbt"
+version = "0.0.0"
+description = ""
+authors = ["Tim Christy <tim@timchristy.io>"]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.12"
+boto3 = "^1.24.61"
+dagster = "1.6.5"
+dagster-dbt = "0.22.5"
+dagster-aws = "0.22.5"
+dagster-cloud = "1.6.5"
+dbt-core = "1.6.1"
+dbt-snowflake = "1.6.1"
+beautifulsoup4 = "4.12.2"
+pandas = "2.1.3"
+
+[tool.poetry.dev-dependencies]
+black = "22.6.0"
+dagit = "1.6.5"
+isort = "^5.10.1"
+pytest = "^7.1.2"
+sqlfluff = "^0.11.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ["py38"]
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.git          # root of the project
+    | \.github
+    | \.venv
+    | build
+    | docs
+    | infra
+    | transform
+  )/
+  | foo.py           # also separately exclude a file named foo.py in
+)
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 88
+
+[tool.sqlfluff.core]
+verbose = 0
+nocolor = false
+dialect = "snowflake"
+templater = "jinja"
+rules = ""
+exclude_rules = "L034,L043"
+recurse = 0
+output_line_length = 80
+runaway_limit = 10
+ignore_templated_areas = true
+encoding = "autodetect"
+disable_noqa = false
+sql_file_exts = ".sql"
+
+[tool.sqlfluff.templater.jinja]
+apply_dbt_builtins = true
+
+[tool.sqlfluff.templater.jinja.macros]
+# Macros provided as builtins for dbt projects
+dbt_ref = "{% macro ref(model_ref) %}{{model_ref}}{% endmacro %}"
+dbt_source = "{% macro source(source_name, table) %}{{source_name}}_{{table}}{% endmacro %}"
+dbt_config = "{% macro config() %}{% for k in kwargs %}{% endfor %}{% endmacro %}"
+dbt_var = "{% macro var(variable, default='') %}item{% endmacro %}"
+dbt_is_incremental = "{% macro is_incremental() %}True{% endmacro %}"
+
+[tool.sqlfluff.rules]
+tab_space_size = 4
+max_line_length = 120
+indent_unit = "space"
+comma_style = "trailing"
+allow_scalar = true
+single_table_references = "consistent"
+unquoted_identifiers_policy = "all"
+
+[tool.sqlfluff.rules.L010]
+capitalisation_policy = "lower"
